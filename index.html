@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Cheats — Премиум клиент</title>
+    <style>
+        /* Полный сброс и запрет скроллбаров */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #09090b;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- ЭКРАН 1: Минималистичный сайт --- */
+        #start-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background: #09090b;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Легкое свечение на фоне для глубины */
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 100, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+            width: 90%;
+            padding: 40px 20px;
+            text-align: center;
+            z-index: 1;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Бейдж статуса */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(0, 255, 100, 0.08);
+            border: 1px solid rgba(0, 255, 100, 0.2);
+            color: #00ff64;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #00ff64;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ff64;
+        }
+
+        /* Заголовок */
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 20px 0;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        /* Подзаголовок */
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: #a1a1aa;
+            max-width: 550px;
+            margin: 0 auto 48px auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Минималистичные фичи (просто текст) */
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            margin-bottom: 56px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #71717a;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-item svg {
+            width: 16px;
+            height: 16px;
+            fill: #00ff64;
+        }
+
+        /* Кнопка */
+        .install-btn {
+            padding: 18px 48px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #09090b;
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+        }
+
+        .install-btn:hover {
+            background: #e4e4e7;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Мелкий текст внизу */
+        .meta {
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: #52525b;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* --- ЭКРАН 2: ВАС ЗАМЕТИЛИ (Скрыт по умолчанию) --- */
+        #prank-screen {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100vw;
+            height: 100vh;
+            padding: 2vh 1vw;
+            box-sizing: border-box;
+            z-index: 10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Эффект ЭЛТ-монитора (сканлайны) для второго экрана */
+        #prank-screen::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
+        }
+
+        .eye-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .eye-svg {
+            width: min(15vh, 180px);
+            height: auto;
+            margin-bottom: 1vh;
+        }
+
+        .title {
+            font-family: 'Arial Narrow', 'Roboto Condensed', sans-serif;
+            font-size: min(5vh, 3rem);
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transform: scaleY(1.3) scaleX(0.9);
+            color: #e0e0e0;
+            text-align: center;
+            margin: 0;
+        }
+
+        .skull-section {
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
+            font-size: min(1.1vw, 1.3vh, 11px);
+            line-height: 1.1;
+            font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', monospace;
+            font-variant-numeric: tabular-nums;
+            white-space: pre;
+            text-align: left;
+            display: inline-block;
+            flex-shrink: 1;
+        }
+
+        .press-key {
+            text-align: center;
+            font-size: min(2.2vh, 16px);
+            margin-top: 1vh;
+            animation: blink 1s step-end infinite;
+            font-family: 'Courier New', Courier, monospace;
+            flex-shrink: 0;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .button-container {
+            flex-shrink: 0;
+            margin-top: 1vh;
+        }
+
+        .win-button {
+            display: inline-block;
+            padding: 1.5vh 3vw;
+            background-color: transparent;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: min(2.5vh, 1.2rem);
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5), inset 0 0 10px rgba(0, 255, 0, 0.2);
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #00ff00;
+            text-align: center;
+        }
+
+        .win-button:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 25px #00ff00, inset 0 0 15px #00ff00;
+            text-shadow: none;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 600px) {
+            .features { gap: 12px 20px; }
+            .feature-item { font-size: 0.8rem; }
+            .install-btn { width: 100%; padding: 16px 20px; }
+            .meta { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ЭКРАН 1: Минималистичный сайт -->
+    <div id="start-screen">
+        <div class="bg-glow"></div>
+        <div class="content-wrapper">
+            
+            <div class="badge">
+                <div class="badge-dot"></div>
+                Undetected • v2.4.0
+            </div>
+
+            <h1>Доминируй в Roblox</h1>
+            
+            <p class="subtitle">
+                Самый мощный и безопасный чит-клиент. Обход Byfron, защита от банов и максимальная производительность без лагов.
+            </p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    Aimbot
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    ESP / Wallhack
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+                    Speed & Fly
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                    Anti-Ban
+                </div>
+            </div>
+
+            <button class="install-btn" id="install-btn">Установить читы</button>
+
+            <div class="meta">
+                <span>Последнее обновление: 2 часа назад</span>
+                <span>Скачано: 1,234,567 раз</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ЭКРАН 2: Пранк (Изначально скрыт) -->
+    <div id="prank-screen">
+        
+        <div class="eye-section">
+            <svg class="eye-svg" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 10 40 Q 100 0 190 40 Q 100 80 10 40 Z" fill="#333" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+                <circle cx="100" cy="40" r="28" fill="#111" stroke="#fff" stroke-width="4"/>
+                <circle cx="100" cy="40" r="6" fill="#fff"/>
+            </svg>
+            <h1 class="title">ВАС ЗАМЕТИЛИ</h1>
+        </div>
+
+        <div class="skull-section">
+<pre>
+                                 ..:^^^~~^^^^^^^^^^^^^~~^^^::.     
+                            .:^^^^^:...                  ..:^^^^^.                                  
+                         .^~^:.                                .:^~^.                               
+                       ^~^:                                        :~~.                             
+                     ^!^                                             :~~                            
+                    !~                                                 ^!.                          
+                   !^                                                   .7.                         
+                  ^!                                                     .7                         
+                  7.                                                      !^                        
+                  ?                                                       ^!                        
+                  7.                                                      ^~                        
+                  ^~         .......                   ..::^^^^:.         !:                        
+                   7.      ^~^^::^^^^^^.            .~~^^:.....:^!.      ^!                         
+                   ^!     ^!          .~~     ^:    7^           !:     ^!                          
+                    ~!    ^~           ^~    ^77:   ^~           7:    ~!                           
+                     ~!   .7:         :7    ~~  !^   !^       .:~!    ~~                            
+                      ^!.  .^~^^:::::^!.  :!^    ~!   ^~^^^^^^^:.    .7                             
+                       !^      ..::::.   :!.   .  :!.                .7                             
+                       7.                !~   ^?^. !^                 !:                            
+                       7.                 ^^^^^ ^^^^                 .7:                            
+                       .~^^::...                               ..::^~~:                             
+                         ..:::^^~~.                         :~~^^^..                                
+                            ^~.  :7..^^^~   .^^^.    :^^~..!^. ^!!                                  
+        .::::.              !~~^  ^!7.  7.  7^..7:  ~~. :!!:  !^!^                     :^^^^^^:     
+     :~~^:::^~^             !: !~  :~^^ ~~:^!   .!:.7. .:^.  :7 7.                   ^~^.    .~!    
+   .!^.       !^            7.  !^:~! ^!.:::^~^^~^^:..~~:^!::7. 7                  .!^         ~~:   
+  :7:          7^           ~~.  .:^.  .^^^^:.  .^~^^~:   .^. .!~                .:7:           .^~^
+:~~.            ~~^.         .~~:.                          :~~.            .:^^^^:.              .?
+?                 :^~^:.       .:^~^:..                .:^~^:.         .:^^~^:..           .....:^~:
+7^..                 .:^~^^:.      .:^^^^^^::::::::^^^^^:.        .:^^~^:..        .::^^^^^^^^^::.  
+ :^^^^^^^^^^^^^^^:.      ..^^~^:..       ...:::::...         .:^^~^:..       ..:^^^^::.             
+                .:^^~^:.      .:^^^^:.                  .:^^^^:.        .:^^^^^:.                   
+                     .:^^^^:..     .:^^^^:.        .:^^~^:..      ..:^^^^:..                        
+                          .:^^~^:..     .:^~^^::^^^^:..      .:^^~^^:.                              
+                               .:^^^^:..    ..::..      .:^^^^:..                                   
+                                   .^~!7:            ~7!^:.                                         
+                            ..:^^^^^:..       ..     .:^^^^^:.                                      
+                      .::^^^^^:..        .:^^^^^~^:.      .::^~^^:.                                 
+      .:^^^^^^^^^^^^^^^::.          .:^^^^:..    .:^~^^:.      ..:^^^^:.             ...            
+    .!~:... ........           .:^^~^:..             ..^^~^:.        .:^^^^::..::^^^^^^^^~:         
+    7:                     .:^~^^:.                       .:^~^^:.        .::::::..      .~!         
+    7.                 :^~^^:.                                ..^^~^:.                     !^        
+    :!^.            .^~^:                                          .:^^^^.                .7:        
+      :^^~:        :!:                                                 .:^~~:            .7:         
+         .7.     .~!                                                       .^~:          ~^          
+          :!^:::^~:                                                          .^~:        ~^          
+            ::::.                                                              .^~^^^::^^!.
+</pre>
+        </div>
+        
+        <div class="press-key">PRESS ANY KEY!</div>
+
+        <div class="button-container">
+            <a href="https://freedownload.moy.su/index.html" class="win-button" target="_blank">нажми что вернуть винду</a>
+        </div>
+
+    </div>
+
+    <!-- JavaScript для переключения экранов и полного экрана -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const installBtn = document.getElementById('install-btn');
+            const startScreen = document.getElementById('start-screen');
+            const prankScreen = document.getElementById('prank-screen');
+
+            installBtn.addEventListener('click', () => {
+                // 1. Запрашиваем полноэкранный режим (F11)
+                const elem = document.documentElement;
+                
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => console.log(err));
+                } else if (elem.webkitRequestFullscreen) { /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE11 / Edge */
+                    elem.msRequestFullscreen();
+                }
+
+                // 2. Скрываем экран с кнопкой
+                startScreen.style.display = 'none';
+
+                // 3. Показываем экран "ВАС ЗАМЕТИЛИ"
+                prankScreen.style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+</html>
